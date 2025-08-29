@@ -1,9 +1,9 @@
 {
   "version": 2,
   "builds": [
-    { "src": "bfhl.py", "use": "@vercel/python" }
+    { "src": "api/bfhl.py", "use": "@vercel/python" }
   ],
   "routes": [
-    { "src": "/bfhl", "methods": ["POST"], "dest": "bfhl.py" }
+    { "src": "/bfhl", "methods": ["POST"], "dest": "api/bfhl.py" }
   ]
 }
