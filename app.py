@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# ✅ Your details (customize if required)
+# ✅ User details (edit with your info)
 FULL_NAME = "john_doe"         # lowercase only
 DOB = "17091999"               # ddmmyyyy
 EMAIL = "john@xyz.com"
@@ -10,7 +10,7 @@ ROLL_NUMBER = "ABCD123"
 
 
 def make_alternating_caps(s: str) -> str:
-    """Convert string into alternating caps (starting with uppercase)."""
+    """Convert a string into alternating caps (starting with uppercase)."""
     result = []
     for idx, ch in enumerate(s):
         if idx % 2 == 0:
@@ -47,7 +47,7 @@ def bfhl():
                     odd_numbers.append(item_str)
                 total_sum += num
 
-            # Alphabets (multi-letter words allowed)
+            # Alphabets (multi-letter allowed)
             elif item_str.isalpha():
                 alphabets.append(item_str.upper())
 
@@ -78,5 +78,5 @@ def bfhl():
         return jsonify({"is_success": False, "message": str(e)}), 500
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# For Vercel: expose "app" object
+app = app
