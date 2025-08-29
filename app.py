@@ -1,66 +1,46 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Union
-import uvicorn
+from utils import process_input
+from datetime import datetime
 
-app = FastAPI(title="BFHL API", version="1.2")
+app = FastAPI(title="BFHL API")
 
-# Input model
-class InputData(BaseModel):
+# ------------------------
+# Input Model
+# ------------------------
+class InputModel(BaseModel):
     full_name: str
-    dob: str   # format: ddmmyyyy
-    email: str
-    college_roll: str
-    array: List[Union[str, int]]
+    college_roll_no: str
+    email_id: str
+    array: List[Union[int, str]]
 
+# ------------------------
+# POST Endpoint
+# ------------------------
 @app.post("/bfhl")
-def process_data(data: InputData):
+def bfhl_endpoint(input_data: InputModel):
     try:
-        user_id = f"{data.full_name.lower().replace(' ', '_')}_{data.dob}"
+        result = process_input(input_data.array)
 
-        # Single-pass processing for speed
-        even_numbers = []
-        odd_numbers = []
-        alphabets = []
-        special_chars = []
-        alpha_chars = []
-        sum_numbers = 0
-
-        for item in data.array:
-            if isinstance(item, int):
-                sum_numbers += item
-                if item % 2 == 0:
-                    even_numbers.append(item)
-                else:
-                    odd_numbers.append(item)
-            elif isinstance(item, str):
-                if item.isalpha():
-                    alphabets.append(item.upper())
-                    alpha_chars.append(item)
-                else:
-                    special_chars.append(item)
-
-        # Reverse concatenation with alternating caps
-        reversed_alpha = ''.join(alpha_chars[::-1])
-        alt_caps = ''.join([c.upper() if i % 2 == 0 else c.lower() for i, c in enumerate(reversed_alpha)])
+        # Generate user_id
+        dob_str = datetime.now().strftime("%d%m%Y")
+        user_id = f"{input_data.full_name.lower()}_{dob_str}"
 
         response = {
             "is_success": True,
             "user_id": user_id,
-            "email": data.email,
-            "college_roll": data.college_roll,
-            "even_numbers": even_numbers,
-            "odd_numbers": odd_numbers,
-            "alphabets": alphabets,
-            "special_chars": special_chars,
-            "sum_of_numbers": sum_numbers,
-            "concat_alpha_reverse_alt_caps": alt_caps
+            "email_id": input_data.email_id,
+            "college_roll_no": input_data.college_roll_no,
+            "even_numbers": result["even_numbers"],
+            "odd_numbers": result["odd_numbers"],
+            "alphabets": result["alphabets"],
+            "special_chars": result["special_chars"],
+            "sum_of_numbers": result["sum_of_numbers"],
+            "concat_alternating_caps": result["concat_alternating_caps"]
         }
 
         return response
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+        return {"is_success": False, "error": str(e)}
