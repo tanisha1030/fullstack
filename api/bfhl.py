@@ -65,6 +65,3 @@ def bfhl():
 
     except Exception as e:
         return jsonify({"is_success": False, "message": "Server Error", "error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run()
