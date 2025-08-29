@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List, Union
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(title="BFHL API", description="VIT Full Stack Question API", version="1.0")
 
 # Input model
 class InputData(BaseModel):
