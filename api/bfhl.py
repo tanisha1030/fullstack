@@ -2,9 +2,8 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Replace with your details
-FULL_NAME = "tanisha_sharma"  # lowercase
-DOB = "29082005"  # ddmmyyyy
+FULL_NAME = "tanisha_sharma"
+DOB = "29082005"
 
 def is_number(value):
     return isinstance(value, (int, float))
@@ -32,20 +31,15 @@ def bfhl():
         if not isinstance(input_array, list):
             return jsonify({"is_success": False, "message": "Input must be an array."}), 400
 
-        even_numbers = []
-        odd_numbers = []
-        alphabets = []
-        special_chars = []
+        even_numbers, odd_numbers, alphabets, special_chars = [], [], [], []
         sum_numbers = 0
         alpha_concat = ""
 
         for item in input_array:
             if is_number(item):
                 sum_numbers += item
-                if item % 2 == 0:
-                    even_numbers.append(item)
-                else:
-                    odd_numbers.append(item)
+                if item % 2 == 0: even_numbers.append(item)
+                else: odd_numbers.append(item)
             elif is_alphabet(item):
                 alphabets.append(item.upper())
                 alpha_concat += item
@@ -67,7 +61,6 @@ def bfhl():
             "sum_of_numbers": sum_numbers,
             "reverse_alternating_alpha": alternating_alpha
         }
-
         return jsonify(response), 200
 
     except Exception as e:
