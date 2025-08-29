@@ -4,22 +4,12 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-// Helper functions
-function isNumber(char) {
-    return !isNaN(char);
-}
-
-function isAlphabet(char) {
-    return /^[A-Za-z]$/.test(char);
-}
-
-function isSpecialChar(char) {
-    return !isNumber(char) && !isAlphabet(char);
-}
+function isNumber(char) { return !isNaN(char); }
+function isAlphabet(char) { return /^[A-Za-z]$/.test(char); }
+function isSpecialChar(char) { return !isNumber(char) && !isAlphabet(char); }
 
 function alternatingCaps(str) {
-    let result = '';
-    let makeUpper = true;
+    let result = '', makeUpper = true;
     for (let ch of str) {
         result += makeUpper ? ch.toUpperCase() : ch.toLowerCase();
         makeUpper = !makeUpper;
@@ -27,21 +17,15 @@ function alternatingCaps(str) {
     return result;
 }
 
-// POST endpoint
 app.post('/bfhl', (req, res) => {
     try {
         const { full_name, email, college_roll_number, array } = req.body;
-
         if (!full_name || !email || !college_roll_number || !Array.isArray(array)) {
             return res.status(400).json({ is_success: false, message: "Invalid input" });
         }
 
-        const evenNumbers = [];
-        const oddNumbers = [];
-        const alphabets = [];
-        const specialChars = [];
-        let sumNumbers = 0;
-        let alphaConcat = '';
+        const evenNumbers = [], oddNumbers = [], alphabets = [], specialChars = [];
+        let sumNumbers = 0, alphaConcat = '';
 
         array.forEach(item => {
             const strItem = String(item);
@@ -82,6 +66,5 @@ app.post('/bfhl', (req, res) => {
     }
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
